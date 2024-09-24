@@ -1,0 +1,101 @@
+function [Error,Nous_agru,Inf,Nous_agru2,peak_day,a,sinj1,S,Nous_set]=espgrip1617_S(llindar1,llindar2,llindar3,S_inj)
+espanya1617_matriu;
+Inf=esp1617.productegrip105HabILI;
+Inf(1)=[];
+%N=10^5;
+deltat=1;
+t0=1;
+tfin=length(Inf)*7;
+temps=t0:deltat:tfin;
+total_setmanes=length(Inf);
+
+%llindar1=0.0348;   %% avalulem en segona iteració // reajustar per Itàlia
+%llindar2=0.1979;   %% avalulem en segona iteració // reajustar per Itàlia
+beta=0.25;
+gamma=0.14286;
+Npassos=length(temps);
+Imax=max(Inf);
+S=zeros(Npassos,1);
+%S0=f*N;
+S(1)=1499.98652872227;
+E=zeros(Npassos,1);
+I=zeros(Npassos,1);
+R=zeros(Npassos,1);
+Nous=zeros(Npassos,1);
+alpha1=zeros(Npassos,1);
+sinj1=zeros(Npassos,1);
+[~,pos]=max(Inf);
+peak_day=7*pos;
+I(1)=1.18925721146915;
+E(1)=1.11157291030977;
+Nous_agru=zeros(length(Inf)*7,1);
+%Total(1)=S(1)+E(1)+I(1)+R(1);
+
+for i=2:Npassos
+Sinj1=S_inj(1);
+Sinj2=S_inj(2);
+Sinj3=S_inj(3);
+Sinj4=S_inj(4);
+    if Nous_agru(i-1)<[0.00500016156841873*Imax]
+        alpha=9.35299350580203e-06;   
+    elseif Nous_agru(i-1)>[0.00500016156841873*Imax] && Nous_agru(i-1)<[0.140000000000000*Imax]
+        alpha=0.000170752230869022;   
+    elseif Nous_agru(i-1)>[0.140000000000000*Imax]
+        alpha=0.000204421108915661;
+    end
+    alpha1(i)=alpha;
+
+    sinj=0;
+    if i >= peak_day 
+        if  i==peak_day
+            sinj=Sinj1;
+            a=i;
+        elseif Nous_agru(i-1) > llindar1*Imax && mod(i,7)==0
+            sinj=Sinj1;
+        elseif Nous_agru(i-1) < llindar1*Imax && Nous_agru(i-1) > llindar2*Imax && mod(i,7)==0
+            sinj=Sinj2;
+        elseif Nous_agru(i-1) < llindar2*Imax && Nous_agru(i-1) > llindar3*Imax && mod(i,7)==0
+            sinj=Sinj3;
+        elseif Nous_agru(i-1) < llindar3*Imax && mod(i,7)==0
+            sinj=Sinj4;
+        end
+        S(i)=S(i-1)+sinj-alpha*S(i-1)*I(i-1)*deltat;
+        sinj1(i)=sinj;
+    else
+        S(i)=S(i-1)-alpha*S(i-1)*I(i-1)*deltat;
+    end
+
+    E(i)=E(i-1)+(alpha*S(i-1)*I(i-1)-beta*E(i-1))*deltat;
+    I(i)=I(i-1)+(beta*E(i-1)-gamma*I(i-1))*deltat;
+    R(i)=R(i-1)+(gamma*I(i-1))*deltat;
+    Nous(i)=beta*E(i-1);
+  
+    %agrupació dels casos nous per setmane
+
+     if i<7
+     Nous_agru(i)=sum(Nous(1:i));
+     else
+     Nous_agru(i)=sum(Nous(i-6:i));              
+     end 
+
+end
+
+
+I1=llindar1*Imax;
+I2=llindar2*Imax;
+Nous_set=zeros(total_setmanes,1);
+for k=1:total_setmanes
+    Nous_set(k)=Nous_agru(k*7);
+end
+Nous_agru2=Nous_agru(7:end);
+IMAX=max(Nous_agru2);
+
+%Càlcul de RMSE i nRMSE
+suma = 0;
+for i=pos:length(Inf)
+    suma = suma + (Inf(i)-Nous_set(i))^2;
+end
+Error = sqrt(suma/(length(Inf)-pos));
+N=mean(Inf(1:pos));
+nError=(Error/N)*100; 
+

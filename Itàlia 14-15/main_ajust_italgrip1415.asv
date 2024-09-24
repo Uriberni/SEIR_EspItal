@@ -1,0 +1,25 @@
+close all
+clear all
+
+
+x0 = [0.0001,0.00045,0.005,0.00,0.5,1,1,2500];
+fun = @(x) italgrip1415([x(1),x(2),x(3)],x(4),x(5),x(6),x(7),x(8));
+
+% limits inferiors variables
+alphaslb=[0,0,0];
+llindarslb=[0.0015,0.45];
+IESlb=[1,1,2400];
+%limits superiors variables
+alphasub=[10^-3,10^-3,10^-2];
+llindarsub=[0.009,0.5];
+IESub=[100,100,3100];
+
+%procés optimització
+lb=[alphaslb,llindarslb,IESlb];
+ub=[alphasub,llindarsub,IESub];
+[x,Error] = fmincon(fun,x0,[],[],[],[],lb,ub);
+%[x,Error] = fminsearch(fun,x0);
+disp(x);
+disp(Error);
+
+italgrip_1415([x(1),x(2),x(3)],x(4),x(5),x(6),x(7),x(8));
