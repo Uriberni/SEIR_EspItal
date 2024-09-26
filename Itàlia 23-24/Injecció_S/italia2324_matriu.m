@@ -18,7 +18,7 @@ opts.VariableNames = ["Week", "CasosProcessats", "casosGrip", "Positivity", "Pos
 opts.VariableTypes = ["double", "double", "double", "double", "double", "double", "double"];
 
 % Import the data
-ital2324 = readtable("C:\Users\urica\Dropbox\TFG_OriolCalsina\Itàlia 23-24\italia2324.xlsx", opts, "UseExcel", false);
+ital2324 = readtable("C:\Users\urica\Dropbox\TFG_OriolCalsina\Itàlia 23-24\Injecció_S\italia2324.xlsx", opts, "UseExcel", false);
 Inf=ital2324.productegrip105HabARI;
 
 %% Clear temporary variables

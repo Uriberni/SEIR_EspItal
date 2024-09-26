@@ -1,4 +1,4 @@
-function [Error,Nous_agru,Inf,difnous,Nous_agru2,Imax,I1,I2,IMAX,Nous,N]=italgrip2324(Alpha,llindar1,llindar2,Iini,Eini,Sini)
+function [Error,Nous_agru,Inf,difnous,Nous_agru2,Imax,I1,I2,Nous,N]=italgrip2324(Alpha,llindar1,llindar2,Iini,Eini,Sini)
 italia2324_matriu;
 %N=10^5;
 deltat=1;
@@ -12,7 +12,7 @@ total_setmanes=length(Inf);
 beta=0.25;
 gamma=0.14286;
 Npassos=length(temps);
-IMAX=max(Inf);
+Imax=max(Inf);
 S=zeros(Npassos,1);
 %S0=f*N;
 S(1)=Sini;

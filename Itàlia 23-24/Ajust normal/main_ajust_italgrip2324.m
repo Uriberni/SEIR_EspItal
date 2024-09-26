@@ -25,7 +25,7 @@ b=[0;0];
 %[x,Error] = fminsearch(fun,x0);
 disp(x);
 disp('error fins màxim és');disp(RMSE);
-[Error,Nous_agru,Inf,difnous,Nous_agru2,Imax,I1,I2,IMAX,Nous,N]=italgrip2324(x(1:3),x(4),x(5),x(6),x(7),x(8));
+[Error,Nous_agru,Inf,difnous,Nous_agru2,Imax,I1,I2,Nous,N]=italgrip2324(x(1:3),x(4),x(5),x(6),x(7),x(8));
 
 
 italgrip_2324(x(1:3),x(4),x(5),x(6),x(7),x(8));
